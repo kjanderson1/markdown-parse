@@ -11,13 +11,22 @@ public class MarkdownParse {
         // find the next [, then find the ], then find the (, then take up to
         // the next )
         int currentIndex = 0;
-        String[] contentsArray = markdown.split("\n");
-        for(String s: contentsArray) {
-            if(s.indexOf("!") == 0) {
-                continue;
-            }
-            
+        while(currentIndex < markdown.length()) {
+            int nextOpenBracket = markdown.indexOf("[", currentIndex);
+            int nextCloseBracket = markdown.indexOf("]", nextOpenBracket);
+            int openParen = markdown.indexOf("(", nextCloseBracket);
+            int closeParen = markdown.indexOf(")", openParen);
+            toReturn.add(markdown.substring(openParen + 1, closeParen));
+            currentIndex = closeParen + 1;
         }
+        // int currentIndex = 0;
+        // String[] contentsArray = markdown.split("\n");
+        // for(String s: contentsArray) {
+        //     if(s.indexOf("!") == 0) {
+        //         continue;
+        //     }
+            
+        // }
         return toReturn;
     }
     public static void main(String[] args) throws IOException {
