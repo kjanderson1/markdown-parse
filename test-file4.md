@@ -1,1 +1,1 @@
-[](][](https://thislinkwontworkeither)
+[link](https:parenthesis()inthemiddleofthelink)
