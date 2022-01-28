@@ -1,4 +1,4 @@
 # Title
 
 [a link!](https://something.com)
-[](][](https://thisisntgoingtowork.com)
+[another link!](https://thisisnt()goingtowork.com)

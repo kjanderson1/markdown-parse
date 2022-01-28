@@ -13,10 +13,9 @@ public class MarkdownParse {
             String[] lineArray = s.split("");
             int startIndex = 0;
             if(lineArray[0].equals("[") && lineArray[lineArray.length - 1].equals(")")) {
-                for(int i = lineArray.length - 1; i >= 0; i--) {
-                    if(lineArray[i].equals("(")) {
+                for(int i = lineArray.length - 1; i > 0; i--) {
+                    if(lineArray[i].equals("(") && lineArray[i-1].equals("]")) {
                         startIndex = i + 1;
-                        break;
                     }
                 }
                 toReturn.add(s.substring(startIndex, s.length() - 1));
