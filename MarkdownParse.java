@@ -8,22 +8,18 @@ import java.util.ArrayList;
 public class MarkdownParse {
     public static ArrayList<String> getLinks(String markdown) {
         ArrayList<String> toReturn = new ArrayList<>();
-        // find the next [, then find the ], then find the (, then take up to
-        // the next )
-        // int currentIndex = 0;
-        // while(currentIndex < markdown.length()) {
-        //     int nextOpenBracket = markdown.indexOf("[", currentIndex);
-        //     int nextCloseBracket = markdown.indexOf("]", nextOpenBracket);
-        //     int openParen = markdown.indexOf("(", nextCloseBracket);
-        //     int closeParen = markdown.indexOf(")", openParen);
-        //     toReturn.add(markdown.substring(openParen + 1, closeParen));
-        //     currentIndex = closeParen + 1;
-        // }
         String[] contentsArray = markdown.split("\n");
         for(String s: contentsArray) {
             String[] lineArray = s.split("");
+            int startIndex = 0;
             if(lineArray[0].equals("[") && lineArray[lineArray.length - 1].equals(")")) {
-                toReturn.add(s.substring(s.indexOf("](") + 2, lineArray.length - 1));
+                for(int i = lineArray.length - 1; i >= 0; i--) {
+                    if(lineArray[i].equals("(")) {
+                        startIndex = i + 1;
+                        break;
+                    }
+                }
+                toReturn.add(s.substring(startIndex, s.length() - 1));
             }
         }
         return toReturn;
