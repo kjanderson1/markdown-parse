@@ -4,35 +4,23 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+
 public class MarkdownParse {
     public static ArrayList<String> getLinks(String markdown) {
         ArrayList<String> toReturn = new ArrayList<>();
-
-        //Split the contents of the markdown file into each individual line
         String[] contentsArray = markdown.split("\n");
-        //Loop through each line, check if it is of a link form
-        //if so, add the solely the link into the return ArrayList
-        for(String s: contentsArray){
-            if(isOfLinkForm(s))
-                toReturn.add(s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
-                //using lastIndexOf() to fix a whitespace issue (I think) on
-                //windows
+        for(String s: contentsArray) {
+            String[] lineArray = s.split("");
+            int startIndex = 0;
+            if(lineArray[0].equals("[") && lineArray[lineArray.length - 1].equals(")")) {
+                for(int i = lineArray.length - 1; i > 0; i--) {
+                    if(lineArray[i].equals("(") && lineArray[i-1].equals("]")) {
+                        startIndex = i + 1;
+                    }
+                }
+                toReturn.add(s.substring(startIndex, s.length() - 1));
+            }
         }
-        /* Original Code
-        -----------------------
-        // find the next [, then find the ], then find the (, then take up to
-        // the next )
-
-        int currentIndex = 0;
-        while(currentIndex < markdown.length()) {
-            int nextOpenBracket = markdown.indexOf("[", currentIndex);
-            int nextCloseBracket = markdown.indexOf("]", nextOpenBracket);
-            int openParen = markdown.indexOf("(", nextCloseBracket);
-            int closeParen = markdown.indexOf(")", openParen);
-            toReturn.add(markdown.substring(openParen + 1, closeParen));
-            currentIndex = closeParen + 1;
-        }
-        //*/
         return toReturn;
     }
     public static boolean isOfLinkForm(String s){
