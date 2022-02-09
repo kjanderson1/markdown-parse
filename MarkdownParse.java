@@ -4,11 +4,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+
 public class MarkdownParse {
     public static ArrayList<String> getLinks(String markdown) {
         ArrayList<String> toReturn = new ArrayList<>();
-
-        //Split the contents of the markdown file into each individual line
         String[] contentsArray = markdown.split("\n");
         //Loop through each line, check if it is of a link form
         //if so, add the solely the link into the return ArrayList
