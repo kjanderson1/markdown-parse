@@ -7,6 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MarkdownParseTest {
+    private ArrayList<String> emptyArrayList;
+    
+    @Before
+    public void setUp() {
+        emptyArrayList = new ArrayList<String>();
+    }
+    
     @Test 
     public void addition() {
         assertEquals(2, 1 + 1);
