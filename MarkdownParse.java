@@ -4,18 +4,28 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+//issues to fix:
+//ensure that link is of proper format (no spaces in link itself)
+//fix case where link can span multiple lines
 
 public class MarkdownParse {
     public static ArrayList<String> getLinks(String markdown) {
         ArrayList<String> toReturn = new ArrayList<>();
+
+        //Split the contents of the markdown file into each individual line
         String[] contentsArray = markdown.split("\n");
         //Loop through each line, check if it is of a link form
         //if so, add the solely the link into the return ArrayList
         for(String s: contentsArray){
-            if(isOfLinkForm(s))
-                toReturn.add(s.substring(s.indexOf("](")+2, s.lastIndexOf(")")));
-                //using lastIndexOf() to fix a whitespace issue (I think) on
-                //windows
+            if(isOfLinkForm(s)){
+                String link = s.substring(s.indexOf("](")+2, s.lastIndexOf(")")); //using lastIndexOf() to fix a whitespace issue (I think) on windows
+                if (!link.contains(" ")) //fixes error on test-file 11 to add an empty string
+                    toReturn.add(link);
+
+            }
+                //toReturn.add(s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
+
+
         }
         /* Original Code
         -----------------------
@@ -59,7 +69,8 @@ public class MarkdownParse {
             else if(toParse.substring(i,i+1).equals("]"))
                 numClosedBrackets++;
         }
-        return container.length() > 2 && numOpenBrackets >= 1 &&
+        //ensure link container has more open open brackets than closed brackets and the length is greater than or equal to two
+        return container.length() >= 2 && numOpenBrackets >= 1 &&
             numClosedBrackets >= 1 && numOpenBrackets >= numClosedBrackets;
     }
     public static void main(String[] args) throws IOException {
@@ -67,5 +78,6 @@ public class MarkdownParse {
 	    String contents = Files.readString(fileName);
         ArrayList<String> links = getLinks(contents);
         System.out.println(links);
+        System.out.println(links.size());
     }
 }
