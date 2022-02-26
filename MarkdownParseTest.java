@@ -3,24 +3,25 @@ import org.junit.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class MarkdownParseTest {
-    private ArrayList<String> emptyArrayList;
-    
-    @Before
-    public void setUp() {
-        emptyArrayList = new ArrayList<String>();
+    @Test
+    public void addition(){
+        assertEquals(2, 1+1);
     }
-    
-    @Test 
-    public void addition() {
-        assertEquals(2, 1 + 1);
+    ArrayList<String> emptyArrayList = new ArrayList<>();
+    List<String> emptyStringList = List.of("");
+
+    @Test
+    public void getLinksBreakFile() throws IOException{
+        Path fileName = Path.of("break-file.md");
+        String contents = Files.readString(fileName);
+        assertEquals(List.of("https://()something.com"), MarkdownParse.getLinks(contents));
     }
 
     @Test
-    public void getLinksTest() throws IOException {
+    public void getLinksTest1() throws IOException{
         Path fileName = Path.of("test-file.md");
         String contents = Files.readString(fileName);
         assertEquals(List.of("https://something.com","some-page.html"), MarkdownParse.getLinks(contents));
@@ -87,6 +88,21 @@ public class MarkdownParseTest {
         Path fileName = Path.of("test-file10.md");
         String contents = Files.readString(fileName);
         assertEquals(emptyArrayList, MarkdownParse.getLinks(contents));
+    }
+
+    @Test
+    public void getLinksTest11() throws IOException{ //markdown does not format this as a link
+        Path fileName = Path.of("test-file11.md");
+        String contents = Files.readString(fileName);
+        //assertEquals(emptyArrayList, MarkdownParse.getLinks(contents)); //this one runs fine when it's compared against an empty StringArrayList
+        assertEquals(emptyStringList, MarkdownParse.getLinks("[]()")); //this throws an error
+    }
+
+    @Test
+    public void getLinksTest12() throws IOException{ //markdown does not format this as a link
+        Path fileName = Path.of("test-file12.md");
+        String contents = Files.readString(fileName);
+        assertEquals(List.of("a-link.html"), MarkdownParse.getLinks(contents));
     }
 
     @Test
