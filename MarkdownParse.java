@@ -1,8 +1,12 @@
 // File reading code from https://howtodoinjava.com/java/io/java-read-file-to-string-examples/
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 //issues to fix:
 //ensure that link is of proper format (no spaces in link itself)
@@ -73,11 +77,37 @@ public class MarkdownParse {
         return container.length() >= 2 && numOpenBrackets >= 1 &&
             numClosedBrackets >= 1 && numOpenBrackets >= numClosedBrackets;
     }
+
+    //Joe's overloaded GetLinks method to use a file directory as an argument
+    public static Map<String, List<String>> getLinks(File dirOrFile) throws IOException {
+        Map<String, List<String>> result = new HashMap<>();
+        if(dirOrFile.isDirectory()) {
+            for(File f: dirOrFile.listFiles()) {
+                result.putAll(getLinks(f));
+            }
+            return result;
+        }
+        else {
+            Path p = dirOrFile.toPath();
+            int lastDot = p.toString().lastIndexOf(".");
+            if(lastDot == -1 || !p.toString().substring(lastDot).equals(".md")) {
+                return result;
+            }
+            ArrayList<String> links = getLinks(Files.readString(p));
+            result.put(dirOrFile.getPath(), links);
+            return result;
+        }
+    }
     public static void main(String[] args) throws IOException {
-		Path fileName = Path.of(args[0]);
-	    String contents = Files.readString(fileName);
+		/*
+        Path fileName = Path.of(args[0]);
+        String contents = Files.readString(fileName);
         ArrayList<String> links = getLinks(contents);
         System.out.println(links);
-        System.out.println(links.size());
+        //*/
+        File fileName = new File(args[0]);
+        Map<String, List<String>> links = getLinks(fileName);
+        for(String s: links.keySet())
+            System.out.println(links.get(s));
     }
 }
