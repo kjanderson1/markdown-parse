@@ -12,10 +12,15 @@ import java.util.Map;
 //ensure that link is of proper format (no spaces in link itself)
 //fix case where link can span multiple lines
 
+//issues to fix:
+//ensure that link is of proper format (no spaces in link itself)
+//fix case where link can span multiple lines
 
 public class MarkdownParse {
     public static ArrayList<String> getLinks(String markdown) {
         ArrayList<String> toReturn = new ArrayList<>();
+
+        //Split the contents of the markdown file into each individual line
         String[] contentsArray = markdown.split("\n");
         //Loop through each line, check if it is of a link form
         //if so, add the solely the link into the return ArrayList
@@ -108,5 +113,6 @@ public class MarkdownParse {
         Map<String, List<String>> links = getLinks(fileName);
         for(String s: links.keySet())
             System.out.println(links.get(s));
+        System.out.println(links.size());
     }
 }
